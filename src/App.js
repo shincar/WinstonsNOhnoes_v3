@@ -284,7 +284,7 @@ class WinstonsNOhnoesBoard extends React.Component {
             </Card.Text>
             <Card.Title>Available tokens:</Card.Title>
             <Card.Text>
-              <table id="tokens">
+              <table id="tokens" height="100">
                 <tbody>{tokens_tbody}</tbody>
               </table>
             </Card.Text>
