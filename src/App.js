@@ -45,8 +45,8 @@ function IsDraw(cells) {
 const WinstonsNOhnoes = Game({
   setup: () => ({
     players: {
-      '0': { name: 'Player 1', token_image: "images/cs-winston.png" },
-      '1': { name: 'Player 2'}, token_image: "images/cs-ohnoes.png" },
+      '0': { name: 'Player 1', token_image: 'images/cs-winston.png', },
+      '1': { name: 'Player 2', token_image: 'images/cs-ohnoes.png', },
     },
 
     cells: [ [], [], [],
@@ -105,7 +105,12 @@ const WinstonsNOhnoes = Game({
   },
 });
 
+function getTokenSize(token) {
+  return 50 + token.size * 20;
+}
+
 class WinstonsNOhnoesBoard extends React.Component {
+
   onClick(id) {
     if (this.isActive(id)) {
       this.props.moves.clickCell(id);
@@ -152,16 +157,16 @@ class WinstonsNOhnoesBoard extends React.Component {
 
     const cellStyle = {
       border: '1px solid #555',
-      width: '50px',
-      height: '50px',
+      width: '120px',
+      height: '120px',
       lineHeight: '50px',
       textAlign: 'center',
     };
 
     const cellSelectedStyle = {
       border: '2px solid red',
-      width: '50px',
-      height: '50px',
+      width: '120px',
+      height: '120px',
       lineHeight: '50px',
       fontWeight: 'bold',
       textAlign: 'center',
@@ -189,18 +194,20 @@ class WinstonsNOhnoesBoard extends React.Component {
     // Calculate current tokens that never used for a player
     let tokens_tbody = [];
     let tokens = [];
+
     for( let i = 0; i < 6; i++) {
       if(!this.props.G.player_tokens[this.props.ctx.currentPlayer][i].isUsed) {
+        var token_size = getTokenSize(this.props.G.player_tokens[this.props.ctx.currentPlayer][i]);
         if(this.props.G.selected_token != null && this.props.G.selected_token.id === i) {
           tokens.push(
             <td style={tokenSelectedStyle} key={i} onClick={() => this.onTokenClick(i)}>
-              {this.props.G.player_tokens[this.props.ctx.currentPlayer][i].size}
+              <Image src={this.props.G.players[this.props.ctx.currentPlayer].token_image} width={token_size}/>
             </td>
           );
         } else {
           tokens.push(
             <td style={tokenStyle} key={i} onClick={() => this.onTokenClick(i)}>
-              {this.props.G.player_tokens[this.props.ctx.currentPlayer][i].size}
+              <Image src={this.props.G.players[this.props.ctx.currentPlayer].token_image} width={token_size}/>
             </td>
           );
         }
@@ -219,17 +226,18 @@ class WinstonsNOhnoesBoard extends React.Component {
         if(this.props.G.selected_token) {
           if(this.props.G.cells[id].length > 0) {
             let top_token = this.props.G.cells[id][this.props.G.cells[id].length-1];
+            token_size = getTokenSize(top_token);
             if(top_token.owner === this.props.G.selected_token.owner &&
                top_token.id === this.props.G.selected_token.id) {
               cells.push(
                 <td style={cellSelectedStyle} key={id} onClick={() => this.onTokenClick(top_token.id)}>
-                  ({top_token.owner},{top_token.size})
+                  <Image src={this.props.G.players[top_token.owner].token_image} width={token_size}/>
                 </td>
               );
             } else {
               cells.push(
                 <td style={cellStyle} key={id} onClick={() => this.onClick(id)}>
-                  ({top_token.owner},{top_token.size})
+                  <Image src={this.props.G.players[top_token.owner].token_image} width={token_size}/>
                 </td>
               );
             }
@@ -241,9 +249,10 @@ class WinstonsNOhnoesBoard extends React.Component {
         } else {
           if(this.props.G.cells[id].length > 0) {
             let top_token = this.props.G.cells[id][this.props.G.cells[id].length-1];
+            token_size = getTokenSize(top_token);
             cells.push(
               <td style={cellStyle} key={id} onClick={() => this.onClickTokenInCell(top_token.owner, top_token.id)}>
-                ({top_token.owner},{top_token.size})
+                <Image src={this.props.G.players[top_token.owner].token_image} width={token_size}/>
               </td>
             );
           } else {
