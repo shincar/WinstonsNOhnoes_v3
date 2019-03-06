@@ -40,8 +40,6 @@ function IsDraw(cells) {
   return false;
 }
 
-
-
 const WinstonsNOhnoes = Game({
   setup: () => ({
     players: {
@@ -106,7 +104,11 @@ const WinstonsNOhnoes = Game({
 });
 
 function getTokenSize(token) {
-  return 50 + token.size * 20;
+  return 35 + token.size * 15;
+}
+
+function getCellTokenSize(token) {
+  return 45 + token.size * 20;
 }
 
 class WinstonsNOhnoesBoard extends React.Component {
@@ -157,19 +159,23 @@ class WinstonsNOhnoesBoard extends React.Component {
 
     const cellStyle = {
       border: '1px solid #555',
-      width: '120px',
-      height: '120px',
+      width: '100px',
+      height: '100px',
       lineHeight: '50px',
       textAlign: 'center',
+      padding: '0px',
+      margin: '0px',
     };
 
     const cellSelectedStyle = {
-      border: '2px solid red',
-      width: '120px',
-      height: '120px',
+      border: '5px solid red',
+      width: '100px',
+      height: '100px',
       lineHeight: '50px',
       fontWeight: 'bold',
       textAlign: 'center',
+      padding: '0px',
+      margin: '0px',
     };
 
     const tokenStyle = {
@@ -181,7 +187,7 @@ class WinstonsNOhnoesBoard extends React.Component {
     };
 
     const tokenSelectedStyle = {
-      border: '2px solid red',
+      border: '5px solid red',
       width: '50px',
       height: '50px',
       lineHeight: '50px',
@@ -226,7 +232,7 @@ class WinstonsNOhnoesBoard extends React.Component {
         if(this.props.G.selected_token) {
           if(this.props.G.cells[id].length > 0) {
             let top_token = this.props.G.cells[id][this.props.G.cells[id].length-1];
-            token_size = getTokenSize(top_token);
+            token_size = getCellTokenSize(top_token);
             if(top_token.owner === this.props.G.selected_token.owner &&
                top_token.id === this.props.G.selected_token.id) {
               cells.push(
@@ -249,7 +255,7 @@ class WinstonsNOhnoesBoard extends React.Component {
         } else {
           if(this.props.G.cells[id].length > 0) {
             let top_token = this.props.G.cells[id][this.props.G.cells[id].length-1];
-            token_size = getTokenSize(top_token);
+            token_size = getCellTokenSize(top_token);
             cells.push(
               <td style={cellStyle} key={id} onClick={() => this.onClickTokenInCell(top_token.owner, top_token.id)}>
                 <Image src={this.props.G.players[top_token.owner].token_image} width={token_size}/>
@@ -288,6 +294,7 @@ class WinstonsNOhnoesBoard extends React.Component {
                 <tbody>{tokens_tbody}</tbody>
               </table>
             </Card.Text>
+            {winner}
             <Card.Title>
             Board:
             </Card.Title>
@@ -296,7 +303,6 @@ class WinstonsNOhnoesBoard extends React.Component {
               <tbody>{board_tbody}</tbody>
             </table>
             </Card.Text>
-            {winner}
           </Card.Body>
         </Card>
 
