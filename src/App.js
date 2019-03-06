@@ -2,7 +2,6 @@ import { Client } from 'boardgame.io/react';
 import { Game } from 'boardgame.io/core';
 import Button from 'react-bootstrap/Button';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
-import Jumbotron from 'react-bootstrap/Jumbotron';
 import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
 import React from 'react';
@@ -70,13 +69,29 @@ const WinstonsNOhnoes = Game({
 
   moves: {
     clickCell(G, ctx, id) {
-      G.player_tokens[ctx.currentPlayer][G.selected_token.id].isUsed = true;
-      G.player_tokens[ctx.currentPlayer][G.selected_token.id].grid_id = id;
-      G.cells[id].push(G.player_tokens[ctx.currentPlayer][G.selected_token.id]);
-      if(G.selected_token.isUsed) {
+      if(G.selected_token.isUsed && G.cells[G.selected_token.grid_id].length >= 2) {
         G.cells[G.selected_token.grid_id].pop();
+        // Send the token back to players hand
+        G.player_tokens[ctx.currentPlayer][G.selected_token.id].isUsed = false;
+        G.player_tokens[ctx.currentPlayer][G.selected_token.id].grid_id = -1;
+        
+        var ret = IsVictory(G.cells);
+        if(!ret.result) {
+          console.log('Player move its token and opponent does not win');
+          G.cells[id].push(G.player_tokens[ctx.currentPlayer][G.selected_token.id]);
+        } else {
+          // Player move its token and make opponent wins!
+          console.log('Player move its token and make opponent wins!');
+        }
+      } else {
+        G.player_tokens[ctx.currentPlayer][G.selected_token.id].isUsed = true;
+        G.player_tokens[ctx.currentPlayer][G.selected_token.id].grid_id = id;
+        if(G.selected_token.isUsed) {
+          G.cells[G.selected_token.grid_id].pop();
+        }
+        // Put the token to the cell player clicked
+        G.cells[id].push(G.player_tokens[ctx.currentPlayer][G.selected_token.id]);
       }
-
       G.selected_token = null;
     },
     selectToken(G, ctx, id) {
@@ -217,6 +232,10 @@ class WinstonsNOhnoesBoard extends React.Component {
             </td>
           );
         }
+      } else {
+        tokens.push(
+          <td style={tokenStyle} key={i}></td>
+        );
       }
     }
     if(tokens.length > 0) {
@@ -282,7 +301,7 @@ class WinstonsNOhnoesBoard extends React.Component {
           </Card.Body>
         </Card>
         <ButtonToolbar style={{ margin: 5 }}>
-          <Button bsStyle="default" style={{ borderColor:"#5DC928" ,background: "#40A310", color:"white"}} size="lg" onClick={() => this.onReset()}>Restart</Button>
+          <Button style={{ borderColor:"#5DC928" ,background: "#40A310", color:"white"}} size="lg" onClick={() => this.onReset()}>Restart</Button>
         </ButtonToolbar>
         <Card style={{ margin: 5, background: "#3A7934", color: "white", borderColor:"#5DC928" }}>
           <Card.Body>
@@ -291,20 +310,20 @@ class WinstonsNOhnoesBoard extends React.Component {
             {current_player_name}
             </Card.Text>
             <Card.Title>Available tokens:</Card.Title>
-            <Card.Text>
+            <Card.Body>
               <table id="tokens" height="100">
                 <tbody>{tokens_tbody}</tbody>
               </table>
-            </Card.Text>
+            </Card.Body>
             {winner}
             <Card.Title>
             Board:
             </Card.Title>
-            <Card.Text>
+            <Card.Body>
             <table id="board">
               <tbody>{board_tbody}</tbody>
             </table>
-            </Card.Text>
+            </Card.Body>
           </Card.Body>
         </Card>
 
