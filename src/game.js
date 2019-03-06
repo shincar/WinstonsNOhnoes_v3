@@ -34,6 +34,7 @@ function IsDraw(cells) {
 }
 
 const WinstonsNOhnoes = Game({
+  name: 'WinstonsNOhnoes',
   setup: () => ({
     players: {
       '0': { name: 'Player 1', token_image: 'images/cs-winston.png', },

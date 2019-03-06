@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import Card from 'react-bootstrap/Card';
-
 import Image from 'react-bootstrap/Image';
 
 function getTokenSize(token) {

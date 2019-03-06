@@ -2,16 +2,17 @@ import React from 'react';
 import { Client } from 'boardgame.io/react';
 import WinstonsNOhnoes from './game';
 import WinstonsNOhnoesBoard from './board';
+import WinstonsNOhnoesLoading from './loading';
 import Card from 'react-bootstrap/Card';
 
 const WinstonsNOhnoesClient = Client({
   game: WinstonsNOhnoes,
   board: WinstonsNOhnoesBoard,
+  loading: WinstonsNOhnoesLoading,
   debug: false,
-  multiplayer: { local: true },
 });
 
-const App = () => (
+const SinglePlayer = () => (
   <div>
     <div className="runner">
       <div className="run">
@@ -23,8 +24,7 @@ const App = () => (
           </p>
           </Card.Body>
         </Card>
-        <WinstonsNOhnoesClient playerID="0" />
-        <WinstonsNOhnoesClient playerID="1" />
+        <WinstonsNOhnoesClient gameID="single"/>
         <Card style={{ margin: 5, background: "#3A7934", color: "white", borderColor:"#5DC928" }}>
           <Card.Body>
           <h1>Copyright @ Adam & Alvin's Fun Lab</h1>
@@ -35,4 +35,4 @@ const App = () => (
   </div>
 );
 
-export default App;
+export default SinglePlayer;
