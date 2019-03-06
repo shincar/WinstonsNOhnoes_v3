@@ -158,7 +158,7 @@ class WinstonsNOhnoesBoard extends React.Component {
     }
 
     const cellStyle = {
-      border: '1px solid #555',
+      border: '2px solid white',
       width: '100px',
       height: '100px',
       lineHeight: '50px',
@@ -168,7 +168,7 @@ class WinstonsNOhnoesBoard extends React.Component {
     };
 
     const cellSelectedStyle = {
-      border: '5px solid red',
+      border: '5px solid #5DC928',
       width: '100px',
       height: '100px',
       lineHeight: '50px',
@@ -187,7 +187,7 @@ class WinstonsNOhnoesBoard extends React.Component {
     };
 
     const tokenSelectedStyle = {
-      border: '5px solid red',
+      border: '5px solid #5DC928',
       width: '50px',
       height: '50px',
       lineHeight: '50px',
@@ -273,16 +273,18 @@ class WinstonsNOhnoesBoard extends React.Component {
 
     return (
       <div>
-        <Jumbotron style={{ margin: 5 }}>
+        <Card style={{ margin: 5, background: "#3A7934", color: "white", borderColor:"#5DC928" }}>
+          <Card.Body>
           <h1>Winstons & Ohnoes</h1>
           <p>
             A advance Tic-Tak-Toe game
           </p>
-        </Jumbotron>
+          </Card.Body>
+        </Card>
         <ButtonToolbar style={{ margin: 5 }}>
-          <Button variant="outline-primary" size="lg" onClick={() => this.onReset()}>Restart</Button>
+          <Button bsStyle="default" style={{ borderColor:"#5DC928" ,background: "#40A310", color:"white"}} size="lg" onClick={() => this.onReset()}>Restart</Button>
         </ButtonToolbar>
-        <Card style={{ margin: 5 }}>
+        <Card style={{ margin: 5, background: "#3A7934", color: "white", borderColor:"#5DC928" }}>
           <Card.Body>
             <Card.Title>Current player:</Card.Title>
             <Card.Text>
