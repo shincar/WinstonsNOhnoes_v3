@@ -1,8 +1,8 @@
 import React from 'react';
 import { Client } from 'boardgame.io/react';
-import WinstonsNOhnoes from './game';
-import WinstonsNOhnoesBoard from './board';
-import WinstonsNOhnoesLoading from './loading';
+import WinstonsNOhnoes from './components/game';
+import WinstonsNOhnoesBoard from './components/board';
+import WinstonsNOhnoesLoading from './components/loading';
 import Card from 'react-bootstrap/Card';
 import PropTypes from 'prop-types';
 import request from 'superagent';
@@ -16,7 +16,7 @@ const WinstonsNOhnoesClient = Client({
   board: WinstonsNOhnoesBoard,
   loading: WinstonsNOhnoesLoading,
   debug: false,
-  multiplayer: { server: 'http://shincar-dev.appspot.com:80' },
+  multiplayer: { server: 'https://shincar-dev.appspot.com' },
 });
 
 class P2 extends React.Component {
@@ -68,7 +68,7 @@ class AuthenticatedInstance extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      server: 'http://shincar-dev.appspot.com',
+      server: 'https://shincar-dev.appspot.com',
       gameID: 'gameID',
       players: {
         '0': {
@@ -116,14 +116,6 @@ class AuthenticatedInstance extends React.Component {
   render() {
     return (
       <div>
-        <Card style={{ margin: 5, background: "#3A7934", color: "white", borderColor:"#5DC928" }}>
-          <Card.Body>
-          <h1>Winstons & Ohnoes</h1>
-          <p>
-            A advance Tic-Tak-Toe game
-          </p>
-          </Card.Body>
-        </Card>
         <div className="runner">
           <div className="run">
             <Card.Body>
@@ -154,11 +146,6 @@ class AuthenticatedInstance extends React.Component {
             </ListGroup>
           </div>
         </div>
-        <Card style={{ margin: 5, background: "#3A7934", color: "white", borderColor:"#5DC928" }}>
-          <Card.Body>
-          <h1>Copyright @ Adam & Alvin's Fun Lab</h1>
-          </Card.Body>
-        </Card>
       </div>
     );
   }

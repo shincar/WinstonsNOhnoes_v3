@@ -1,5 +1,5 @@
 const Server = require('boardgame.io/server').Server;
-import WinstonsNOhnoes from './game';
+import WinstonsNOhnoes from './components/game';
 var port = process.env.PORT || 8000;
 
 console.log('WinstonsNOhnoes.name: ' + WinstonsNOhnoes.name);
