@@ -15,13 +15,14 @@ const WinstonsNOhnoesClient = Client({
   board: WinstonsNOhnoesBoard,
   loading: WinstonsNOhnoesLoading,
   debug: false,
-  multiplayer: { server: 'localhost:8000' },
+  multiplayer: { server: 'http://shincar-dev.appspot.com' },
 });
 
 class P1 extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      server: 'http://shincar-dev.appspot.com',
       gameID: 'gameID',
       players: {
         '0': {
@@ -36,10 +37,10 @@ class P1 extends React.Component {
   
   async onNewGame() {
     const gameName = 'WinstonsNOhnoes';
-    const PORT = 8000;
+    const server = this.state.server;
 
     const newGame = await request
-      .post(`http://localhost:${PORT}/games/${gameName}/create`)
+      .post(`${server}/games/${gameName}/create`)
       .send({ numPlayers: 2 });
 
     const gameID = newGame.body.gameID;
@@ -49,7 +50,7 @@ class P1 extends React.Component {
 
     let playerID = 0;
     const player = await request
-      .post(`http://localhost:${PORT}/games/${gameName}/${gameID}/join`)
+      .post(`${server}/games/${gameName}/${gameID}/join`)
       .send({
         gameName,
         playerID,
