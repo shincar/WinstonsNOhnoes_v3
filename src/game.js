@@ -37,8 +37,8 @@ const WinstonsNOhnoes = Game({
   name: 'WinstonsNOhnoes',
   setup: () => ({
     players: {
-      '0': { name: 'Player 1', token_image: 'images/cs-winston.png', },
-      '1': { name: 'Player 2', token_image: 'images/cs-ohnoes.png', },
+      '0': { name: 'Player 1', token_image: 'https://shincar.github.io/games/images/cs-winston.png', },
+      '1': { name: 'Player 2', token_image: 'https://shincar.github.io/games/images/cs-ohnoes.png', },
     },
 
     cells: [ [], [], [],
