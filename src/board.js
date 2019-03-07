@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from 'react-bootstrap/Button';
-import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
 
@@ -192,9 +190,6 @@ class WinstonsNOhnoesBoard extends React.Component {
 
     return (
       <div>
-        <ButtonToolbar style={{ margin: 5 }}>
-          <Button style={{ borderColor:"#5DC928" ,background: "#40A310", color:"white"}} size="lg" onClick={() => this.onReset()}>Restart</Button>
-        </ButtonToolbar>
         <Card style={{ margin: 5, background: "#3A7934", color: "white", borderColor:"#5DC928" }}>
           <Card.Body>
             <Card.Title>Current player:</Card.Title>
