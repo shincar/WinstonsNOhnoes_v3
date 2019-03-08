@@ -1,9 +1,8 @@
 import React from 'react';
 import { Client } from 'boardgame.io/react';
-import WinstonsNOhnoes from './components/game';
-import WinstonsNOhnoesBoard from './components/board';
-import WinstonsNOhnoesLoading from './components/loading';
-import Card from 'react-bootstrap/Card';
+import WinstonsNOhnoes from './game';
+import WinstonsNOhnoesBoard from './board';
+import WinstonsNOhnoesLoading from './loading';
 
 const WinstonsNOhnoesClient = Client({
   game: WinstonsNOhnoes,

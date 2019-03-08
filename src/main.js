@@ -1,8 +1,6 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import Header from './components/header'
 import MenuTabs from './components/tabs'
-import Content from './components/content'
 import Footer from './components/footer'
 import "./index.css";
 

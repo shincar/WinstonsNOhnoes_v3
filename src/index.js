@@ -2,11 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route } from "react-router-dom";
 import Main from './main';
-import SinglePlayer from './SinglePlayer';
+import SinglePlayer from './components/SinglePlayer';
 import MultiPlayer from './MultiPlayers';
 import Authenticated from './Authenticated';
-import P1 from './P1';
-import P2 from './P2';
+import P1 from './components/P1';
+import P2 from './components/P2';
 import('./index.css')
 
 ReactDOM.render(

@@ -23,6 +23,21 @@ div {
   border: 0px;
 }
 
+.list-group-item {
+  background-color: green;
+  color: white;
+  border: 2px solid white;
+}
+
+.list-group-item:hover {
+  background-color: #5DC928;
+}
+
+.list-group-item.active {
+  background-color: #95E66D;
+  border: 2px solid white;
+}
+
 /* Inactive tab */
 .nav-tabs .nav-link,
 .nav-tabs .nav-link:hover,
