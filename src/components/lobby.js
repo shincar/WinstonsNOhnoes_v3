@@ -1,8 +1,4 @@
 import React from 'react';
-import { Client } from 'boardgame.io/react';
-import WinstonsNOhnoes from './game';
-import WinstonsNOhnoesBoard from './board';
-import WinstonsNOhnoesLoading from './loading';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -10,46 +6,7 @@ import FormControl from 'react-bootstrap/FormControl';
 import ListGroup from 'react-bootstrap/ListGroup';
 import request from 'superagent';
 
-const WinstonsNOhnoesClient = Client({
-  game: WinstonsNOhnoes,
-  board: WinstonsNOhnoesBoard,
-  loading: WinstonsNOhnoesLoading,
-  debug: false,
-  multiplayer: { server: 'https://shincar-dev.appspot.com' },
-});
-
 class AvailableGames extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      server: 'https://shincar-dev.appspot.com',
-      playerID: '1',
-      playerName: '1',
-      gameInstances: [],
-      selectedGameID: "",
-      gameListTitle: "No available games",
-    };
-  }
-  
-  componentDidMount() {
-    console.log('AvailableGames mounted');
-  }
-  
-  updateGameInstances = (gameInstances) => {
-    console.log('Got game list in AvailableGames');
-    if( gameInstances.length > 0) {
-      const availableGameInstances = gameInstances.filter(gameInstance => gameInstance.players[1].name === undefined);
-      this.setState({
-        gameListTitle: "Available Games",
-        gameInstances: availableGameInstances,
-      })
-    } else {
-      this.setState({
-        gameListTitle: "No available games",
-      })
-    }
-  }
-  
   onGameSelected(e, gameID) {
     e.stopPropagation()
     this.props.onGameSelected(gameID);
@@ -57,16 +14,20 @@ class AvailableGames extends React.Component {
   
   renderGame(item) {
     var actionKey = '#' + item.gameID
-    var discription = 'Winstons & Ohnoes Game by ' + item.players[0].name
-    return <ListGroup.Item key={item.gameID} action href={actionKey} onClick={(e) => this.onGameSelected(e, item.gameID)}>{discription}</ListGroup.Item>
+    var discription = 'Winstons & Ohnoes Game (' + item.players[0].name + ', ' + (item.players[1].name ? item.players[1].name : 'empty') + ')';
+    return <ListGroup.Item key={item.gameID} action href={actionKey} onClick={(e) => this.onGameSelected(e, item.gameID)}>
+            {discription}
+           </ListGroup.Item>
   }
   
   render() {
+    const gameListTitle = this.props.availableGameInstances.length > 0 ? 'Available Games' : 'No available games'
+    
     return(
             <div>
-              <Card.Title>{this.state.gameListTitle}</Card.Title>
+              <Card.Title>{gameListTitle}</Card.Title>
               <ListGroup defaultActiveKey="#">
-                {this.state.gameInstances.map(item => this.renderGame(item))}
+                {this.props.availableGameInstances.map(item => this.renderGame(item))}
               </ListGroup>
             </div>
           )
@@ -76,18 +37,20 @@ class AvailableGames extends React.Component {
 class Lobby extends React.Component {
   constructor(props) {
     super(props);
-    this.availableGamesElement = React.createRef();
+    // this.availableGamesElement = React.createRef();
     this.state = {
       server: 'https://shincar-dev.appspot.com',
-      gameID: 'gameID',
+      gameID: '',
       playerID: '0',
-      playerName: '0',
-      gameInstances: [],
+      playerName: '',
+      availableGameInstances: [],
       players: {
         '0': {
+          name: 'Player 1',
           credentials: 'credentials',
         },
         '1': {
+          name: 'Player 2',
           credentials: 'credentials',
         },
       },
@@ -102,9 +65,8 @@ class Lobby extends React.Component {
       .get(`${server}/games/${gameName}`)
       .send()
     
-    console.log('Lobby::Get GameInstances: ' + gameinfo.body.gameInstances.length);
-    this.setState({ gameInstances: gameinfo.body.gameInstances });
-    this.availableGamesElement.current.updateGameInstances(this.state.gameInstances);
+    console.log([...gameinfo.body.gameInstances.filter(gameInstance => (gameInstance.players[1].name === undefined))]);
+    this.setState({ availableGameInstances: [...gameinfo.body.gameInstances.filter(gameInstance => (gameInstance.players[1].name === undefined))] });
   }
   
   async componentDidMount() {
@@ -119,8 +81,11 @@ class Lobby extends React.Component {
     })
   }
   
-  async onCreate() {
-    console.log(this.state.playerName + 'try to create a game');
+  async onCreateGame() {
+    if(this.state.playerName === '') {
+      console.log('Please input player name');
+      return;
+    }
     const gameName = 'WinstonsNOhnoes';
     const server = this.state.server;
 
@@ -130,7 +95,6 @@ class Lobby extends React.Component {
 
     const gameID = newGame.body.gameID;
 
-    console.log('Create a new game, id: ' + gameID);
     let playerCredentials = [];
 
     let playerID = 0;
@@ -144,24 +108,35 @@ class Lobby extends React.Component {
     
     playerCredentials.push(player.body.playerCredentials);
     
-    this.refreshGameInfo();
-    
-    this.setState({
-      gameID,
+    const gameInstance = {
+      gameID: gameID,
       playerID: '0',
+      playerName: this.state.playerName,
       players: {
         '0': {
+          name: this.state.playerName,
           credentials: playerCredentials[0],
         },
         '1': {
+          name: 'Player 2',
           credentials: 'unknown',
         },
       },
-    });
+    }
+    
+    this.props.onTabChange('playground', gameInstance);
   }
   
   async onJoin() {
-    console.log('Try to join game id: ' + this.state.gameID);
+    if(this.state.playerName === '') {
+      console.log('Please input player name');
+      return;
+    }
+    if(this.state.gameID === '') {
+      console.log('Please select a game');
+      return;
+    }
+    
     const gameName = 'WinstonsNOhnoes';
     const server = this.state.server;
 
@@ -175,21 +150,25 @@ class Lobby extends React.Component {
         playerID,
         playerName: this.state.playerName,
       });
-
+    
     playerCredentials.push(player.body.playerCredentials);
     
-    this.setState({
-      gameID,
+    const gameInstance = {
+      gameID: gameID,
       playerID: '1',
+      playerName: this.state.playerName,
       players: {
         '0': {
+          name: 'Player 1',
           credentials: 'unknown',
         },
         '1': {
+          name: this.state.playerName,
           credentials: playerCredentials[0],
         },
       },
-    });
+    }
+    this.props.onTabChange('playground', gameInstance);
   }
   
   onPlayerNameChanged(e) {
@@ -203,7 +182,7 @@ class Lobby extends React.Component {
       <div>
       <Card style={{ margin: 5, background: "#3A7934", color: "white", borderColor:"#5DC928" }}>
         <Card.Body>
-        <AvailableGames ref={this.availableGamesElement} onGameSelected={this.onSelectGame.bind(this)}/>
+        
         <InputGroup className="mb-3">
             <FormControl
               controlid="playerName"
@@ -214,20 +193,12 @@ class Lobby extends React.Component {
               onChange={e => this.onPlayerNameChanged(e)}
             />
         </InputGroup>
-        <Button style={{ margin: "5px", borderColor:"#5DC928" ,background: "#40A310", color:"white"}} onClick={() => this.onCreate()}>Create Game</Button>
-        <WinstonsNOhnoesClient
-              gameID={this.state.gameID}
-              playerID={this.state.playerID}
-              credentials={this.state.players[this.state.playerID].credentials}
-            />
-        <ListGroup style={{ margin: 5 }}>
-              <ListGroup.Item variant="success">Game ID: {this.state.gameID}</ListGroup.Item>
-              <ListGroup.Item variant="success">Player Credential: {this.state.players[this.state.playerID].credentials}</ListGroup.Item>
-        </ListGroup>
-        
-        
+        <Button style={{ margin: "5px", borderColor:"#5DC928" ,background: "#40A310", color:"white"}} onClick={() => this.onCreateGame()}>Create Game</Button>
         <Button style={{ margin: "5px", borderColor:"#5DC928" ,background: "#40A310", color:"white"}} onClick={() => this.refreshGameInfo()}>Refresh Game</Button>
-        <Button style={{ margin: "5px", borderColor:"#5DC928" ,background: "#40A310", color:"white"}} onClick={() => this.onJoin()}>Join Game</Button>
+        <Button style={{ margin: "5px", borderColor:"#5DC928" ,background: "#40A310", color:"white"}} onClick={() => this.onJoin()}>Join Game
+        </Button>
+        
+        <AvailableGames availableGameInstances={this.state.availableGameInstances} onGameSelected={this.onSelectGame.bind(this)}/>
         </Card.Body>
       </Card>
       </div>

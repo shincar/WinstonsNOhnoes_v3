@@ -17,6 +17,8 @@ class WinstonsNOhnoesBoard extends React.Component {
     ctx: PropTypes.any.isRequired,
     moves: PropTypes.any.isRequired,
     playerID: PropTypes.string,
+    playerName: PropTypes.string,
+    players: PropTypes.any,
     isActive: PropTypes.bool,
     isMultiplayer: PropTypes.bool,
     isConnected: PropTypes.bool,
@@ -45,10 +47,6 @@ class WinstonsNOhnoesBoard extends React.Component {
     if (!this.props.isActive) return false;
 
     return true;
-  }
-
-  onReset() {
-    this.props.reset();
   }
 
   render() {
@@ -100,7 +98,10 @@ class WinstonsNOhnoesBoard extends React.Component {
       textAlign: 'center',
     };
 
-    let current_player_name = this.props.G.players[this.props.ctx.currentPlayer].name;
+    let currentPlayerName = this.props.G.players[this.props.ctx.currentPlayer].name;
+    if(this.props.players !== undefined) {
+      currentPlayerName = this.props.players[this.props.ctx.currentPlayer].name;
+    }
 
     // Calculate current tokens that never used for a player
     let tokens_tbody = [];
@@ -194,7 +195,7 @@ class WinstonsNOhnoesBoard extends React.Component {
           <Card.Body>
             <Card.Title>Current player:</Card.Title>
             <Card.Text>
-            {current_player_name}
+            {currentPlayerName}
             </Card.Text>
             <Card.Title>Available tokens:</Card.Title>
             <Card.Body>

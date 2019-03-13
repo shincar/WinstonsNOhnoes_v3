@@ -119,6 +119,7 @@ class AuthenticatedInstance extends React.Component {
             <WinstonsNOhnoesClient
               gameID={this.props.gameID}
               playerID="0"
+              playerName="Player 1"
               credentials={this.props.players['0'].credentials}
             />
             <ListGroup style={{ margin: 5 }}>
