@@ -4,9 +4,6 @@ import WinstonsNOhnoes from './game';
 import WinstonsNOhnoesBoard from './board';
 import WinstonsNOhnoesLoading from './loading';
 import PropTypes from 'prop-types';
-import request from 'superagent';
-import Button from 'react-bootstrap/Button';
-import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Card from 'react-bootstrap/Card';
 
@@ -15,7 +12,7 @@ const WinstonsNOhnoesClient = Client({
   board: WinstonsNOhnoesBoard,
   loading: WinstonsNOhnoesLoading,
   debug: false,
-  multiplayer: { server: 'http://localhost:8002' },
+  multiplayer: { server: 'https://shincar-dev.appspot.com' },
 });
 
 class GameConsole extends React.Component {

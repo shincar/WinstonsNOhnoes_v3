@@ -65,7 +65,6 @@ class Lobby extends React.Component {
       .get(`${server}/games/${gameName}`)
       .send()
     
-    console.log([...gameinfo.body.gameInstances.filter(gameInstance => (gameInstance.players[1].name === undefined))]);
     this.setState({ availableGameInstances: [...gameinfo.body.gameInstances.filter(gameInstance => (gameInstance.players[1].name === undefined))] });
   }
   
@@ -74,7 +73,6 @@ class Lobby extends React.Component {
   }
   
   onSelectGame(gameID) {
-    console.log('Lobby receive player click game id ' + gameID);
     this.setState({
       gameID: gameID,
       playerID: '1',

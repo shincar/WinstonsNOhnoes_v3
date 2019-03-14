@@ -42,7 +42,7 @@ class WinstonsNOhnoesBoard extends React.Component {
   }
 
   isActive(id) {
-    if (this.props.G.cells[id].length > 0 && this.props.G.cells[id][this.props.G.cells[id].length-1].size >= this.props.G.selected_token.size) return false;
+    if (this.props.G.cells[id][id].length > 0 && this.props.G.cells[id][id][this.props.G.cells[id][id].length-1].size >= this.props.G.selected_token.size) return false;
 
     if (!this.props.isActive) return false;
 
@@ -140,8 +140,8 @@ class WinstonsNOhnoesBoard extends React.Component {
         const id = 3 * i + j;
 
         if(this.props.G.selected_token) {
-          if(this.props.G.cells[id].length > 0) {
-            let top_token = this.props.G.cells[id][this.props.G.cells[id].length-1];
+          if(this.props.G.cells[id][id].length > 0) {
+            let top_token = this.props.G.cells[id][id][this.props.G.cells[id][id].length-1];
             token_size = getCellTokenSize(top_token);
             if(top_token.owner === this.props.G.selected_token.owner &&
                top_token.id === this.props.G.selected_token.id) {
@@ -163,8 +163,8 @@ class WinstonsNOhnoesBoard extends React.Component {
             );
           }
         } else {
-          if(this.props.G.cells[id].length > 0) {
-            let top_token = this.props.G.cells[id][this.props.G.cells[id].length-1];
+          if(this.props.G.cells[id][id].length > 0) {
+            let top_token = this.props.G.cells[id][id][this.props.G.cells[id][id].length-1];
             token_size = getCellTokenSize(top_token);
             if(top_token.owner === this.props.ctx.currentPlayer) {
               cells.push(

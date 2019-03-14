@@ -12,12 +12,12 @@ function IsVictory(cells) {
   var bFound = false;
   let winner;
   lines.forEach(line => {
-    if( cells[line[0]].length > 0 &&
-        cells[line[1]].length > 0 &&
-        cells[line[2]].length > 0) {
-      let top_token_1 = cells[line[0]][cells[line[0]].length-1];
-      let top_token_2 = cells[line[1]][cells[line[1]].length-1];
-      let top_token_3 = cells[line[2]][cells[line[2]].length-1];
+    if( cells[line[0]][line[0]].length > 0 &&
+        cells[line[1]][line[1]].length > 0 &&
+        cells[line[2]][line[2]].length > 0) {
+      let top_token_1 = cells[line[0]][line[0]][cells[line[0]][line[0]].length-1];
+      let top_token_2 = cells[line[1]][line[1]][cells[line[1]][line[1]].length-1];
+      let top_token_3 = cells[line[2]][line[2]][cells[line[2]][line[2]].length-1];
       if( top_token_1.owner === top_token_2.owner &&
           top_token_1.owner === top_token_3.owner ) {
         winner = top_token_1.owner;
@@ -41,24 +41,30 @@ const WinstonsNOhnoes = Game({
       '1': { name: 'Player 2', token_image: 'https://shincar.github.io/games/images/cs-ohnoes.png', },
     },
 
-    cells: [ [], [], [],
-             [], [], [],
-             [], [], [] ],
+    cells: [ { '0': [] }, 
+             { '1': [] }, 
+             { '2': [] },
+             { '3': [] }, 
+             { '4': [] }, 
+             { '5': [] },
+             { '6': [] }, 
+             { '7': [] }, 
+             { '8': [] } ],
 
-    player_tokens: [
-      [{ id: 0, owner: "0", size: 0, isUsed: false, grid_id: 0},
-       { id: 1, owner: "0", size: 0, isUsed: false, grid_id: 0},
-       { id: 2, owner: "0", size: 1, isUsed: false, grid_id: 0},
-       { id: 3, owner: "0", size: 1, isUsed: false, grid_id: 0},
-       { id: 4, owner: "0", size: 2, isUsed: false, grid_id: 0},
-       { id: 5, owner: "0", size: 2, isUsed: false, grid_id: 0}],
-      [{ id: 0, owner: "1", size: 0, isUsed: false, grid_id: 0},
-       { id: 1, owner: "1", size: 0, isUsed: false, grid_id: 0},
-       { id: 2, owner: "1", size: 1, isUsed: false, grid_id: 0},
-       { id: 3, owner: "1", size: 1, isUsed: false, grid_id: 0},
-       { id: 4, owner: "1", size: 2, isUsed: false, grid_id: 0},
-       { id: 5, owner: "1", size: 2, isUsed: false, grid_id: 0},],
-      ],
+    player_tokens: {
+      '0': [{ id: 0, owner: '0', size: 0, isUsed: false, grid_id: 0},
+            { id: 1, owner: '0', size: 0, isUsed: false, grid_id: 0},
+            { id: 2, owner: '0', size: 1, isUsed: false, grid_id: 0},
+            { id: 3, owner: '0', size: 1, isUsed: false, grid_id: 0},
+            { id: 4, owner: '0', size: 2, isUsed: false, grid_id: 0},
+            { id: 5, owner: '0', size: 2, isUsed: false, grid_id: 0}],
+      '1': [{ id: 0, owner: '1', size: 0, isUsed: false, grid_id: 0},
+            { id: 1, owner: '1', size: 0, isUsed: false, grid_id: 0},
+            { id: 2, owner: '1', size: 1, isUsed: false, grid_id: 0},
+            { id: 3, owner: '1', size: 1, isUsed: false, grid_id: 0},
+            { id: 4, owner: '1', size: 2, isUsed: false, grid_id: 0},
+            { id: 5, owner: '1', size: 2, isUsed: false, grid_id: 0},],
+    },
     selected_token: null,
     switch_player: false,
   }),
@@ -66,7 +72,7 @@ const WinstonsNOhnoes = Game({
   moves: {
     clickCell(G, ctx, id) {
       if(G.selected_token.isUsed && G.cells[G.selected_token.grid_id].length >= 2) {
-        G.cells[G.selected_token.grid_id].pop();
+        G.cells[G.selected_token.grid_id][G.selected_token.grid_id].pop();
         // Send the token back to players hand
         G.player_tokens[ctx.currentPlayer][G.selected_token.id].isUsed = false;
         G.player_tokens[ctx.currentPlayer][G.selected_token.id].grid_id = -1;
@@ -74,7 +80,7 @@ const WinstonsNOhnoes = Game({
         var ret = IsVictory(G.cells);
         if(!ret.result) {
           // console.log('Player move its token and opponent does not win');
-          G.cells[id].push(G.player_tokens[ctx.currentPlayer][G.selected_token.id]);
+          G.cells[id][id].push(G.player_tokens[ctx.currentPlayer][G.selected_token.id]);
         } else {
           // Player move its token and make opponent wins!
           // console.log('Player move its token and make opponent wins!');
@@ -83,10 +89,11 @@ const WinstonsNOhnoes = Game({
         G.player_tokens[ctx.currentPlayer][G.selected_token.id].isUsed = true;
         G.player_tokens[ctx.currentPlayer][G.selected_token.id].grid_id = id;
         if(G.selected_token.isUsed) {
-          G.cells[G.selected_token.grid_id].pop();
+          G.cells[G.selected_token.grid_id][G.selected_token.grid_id].pop();
         }
+        
         // Put the token to the cell player clicked
-        G.cells[id].push(G.player_tokens[ctx.currentPlayer][G.selected_token.id]);
+        G.cells[id][id].push(G.player_tokens[ctx.currentPlayer][G.selected_token.id]);
       }
       G.selected_token = null;
       G.switch_player = true;

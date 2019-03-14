@@ -44,6 +44,25 @@ class MenuTabs extends React.Component {
       activeKey: key,
     });
   }
+
+  renderTabs() {
+    return (
+      <div>
+      <Tab eventKey="lobby" title="Lobby">
+        <Lobby onTabChange={(key, gameInstance) => this.onTabChange(key, gameInstance)}/>
+      </Tab>
+      <Tab eventKey="playground" title="Console">
+        <Console activeGame={this.state.activeGame}/>
+      </Tab>
+      <Tab eventKey="p1" title="Player1">
+        <P1 />
+      </Tab>
+      <Tab eventKey="p2" title="Player2">
+        <P2 />
+      </Tab>
+      </div>
+    )
+  }
   
   render() {
     return (
@@ -57,12 +76,6 @@ class MenuTabs extends React.Component {
           </Tab>
           <Tab eventKey="playground" title="Console">
             <Console activeGame={this.state.activeGame}/>
-          </Tab>
-          <Tab eventKey="p1" title="Player1">
-            <P1 />
-          </Tab>
-          <Tab eventKey="p2" title="Player2">
-            <P2 />
           </Tab>
         </Tabs>
       </div>)
