@@ -8,13 +8,14 @@ import request from 'superagent';
 import Button from 'react-bootstrap/Button';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import ListGroup from 'react-bootstrap/ListGroup';
+import Card from 'react-bootstrap/Card';
 
 const WinstonsNOhnoesClient = Client({
   game: WinstonsNOhnoes,
   board: WinstonsNOhnoesBoard,
   loading: WinstonsNOhnoesLoading,
   debug: false,
-  multiplayer: { server: 'https://shincar-dev.appspot.com' },
+  multiplayer: { server: 'http://localhost:8002' },
 });
 
 class GameConsole extends React.Component {
@@ -23,14 +24,26 @@ class GameConsole extends React.Component {
   }
   
   render() {
-    return (
-      <AuthenticatedInstance 
-        gameID={this.props.activeGame.gameID} 
-        playerID={this.props.activeGame.playerID} 
-        playerName={this.props.activeGame.playerName} 
-        players={this.props.activeGame.players}
-      />
-    );
+    if (this.props.activeGame.gameID === 'unknown') {
+      return (  
+        <div>
+          <Card style={{ margin: 5, background: "#3A7934", color: "white", borderColor:"#5DC928" }}>
+          <Card.Body>
+            <Card.Title>No Active Game</Card.Title>
+          </Card.Body>
+          </Card>
+        </div>
+      )
+    } else {
+      return (
+        <AuthenticatedInstance 
+          gameID={this.props.activeGame.gameID} 
+          playerID={this.props.activeGame.playerID} 
+          playerName={this.props.activeGame.playerName} 
+          players={this.props.activeGame.players}
+        />
+      )
+    }
   }
 }
 
